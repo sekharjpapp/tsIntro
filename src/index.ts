@@ -232,3 +232,29 @@ const result = calculator
     .subtract(25)
     .getValue();
 console.log('Calculator chain result:', result);
+
+// Import and use shape calculations
+import { Shape, ShapeCalculator, Rectangle, Circle, printShapeDetails } from './shapes';
+
+console.log('\n=== Shape Calculations with Generics ===');
+
+// Create shapes
+const rectangle = new Rectangle(5, 3);
+const circle = new Circle(4);
+
+// Create shape calculator
+const shapeCalculator = new ShapeCalculator<Shape>();
+shapeCalculator.addShape(rectangle);
+shapeCalculator.addShape(circle);
+
+// Print individual shape details
+console.log('\n=== Individual Shape Details ===');
+shapeCalculator.getAllShapes().forEach(shape => {
+    console.log(`\n${shape.getType()}:`);
+    printShapeDetails(shape);
+});
+
+// Calculate totals
+console.log('\n=== Total Calculations ===');
+console.log(`Total Area: ${shapeCalculator.getTotalArea().toFixed(2)}`);
+console.log(`Total Perimeter: ${shapeCalculator.getTotalPerimeter().toFixed(2)}`);
