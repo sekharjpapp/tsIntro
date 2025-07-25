@@ -44,3 +44,170 @@ console.log('Fruits with more than 5 characters:', longFruits);
 // reduce: accumulate values
 const totalLength = fruits.reduce((acc, fruit) => acc + fruit.length, 0);
 console.log('Total length of all fruit names:', totalLength);
+
+// Generic class examples with Product and Order management
+interface Product {
+    id: number;
+    name: string;
+    price: number;
+}
+
+interface Order {
+    id: number;
+    customerName: string;
+    items: Product[];
+}
+
+// Generic DataManager class to handle both Products and Orders
+class DataManager<T> {
+    private items: T[] = [];
+
+    // Add an item
+    add(item: T): void {
+        this.items.push(item);
+    }
+
+    // Get all items
+    getAll(): T[] {
+        return this.items;
+    }
+
+    // Find item by custom predicate
+    find(predicate: (item: T) => boolean): T | undefined {
+        return this.items.find(predicate);
+    }
+
+    // Filter items by custom predicate
+    filter(predicate: (item: T) => boolean): T[] {
+        return this.items.filter(predicate);
+    }
+}
+
+// Create sample data
+const products: Product[] = [
+    { id: 1, name: "Laptop", price: 999 },
+    { id: 2, name: "Smartphone", price: 699 },
+    { id: 3, name: "Headphones", price: 199 }
+];
+
+const orders: Order[] = [
+    {
+        id: 1,
+        customerName: "John Doe",
+        items: [products[0], products[2]]
+    },
+    {
+        id: 2,
+        customerName: "Jane Smith",
+        items: [products[1]]
+    }
+];
+
+// Demonstrate generic class usage
+console.log('\n=== Generic Class Examples ===');
+
+// Product manager
+const productManager = new DataManager<Product>();
+products.forEach(product => productManager.add(product));
+
+// Order manager
+const orderManager = new DataManager<Order>();
+orders.forEach(order => orderManager.add(order));
+
+// Example operations
+console.log('\n=== Product Operations ===');
+console.log('All products:', productManager.getAll());
+console.log('Products over $500:', productManager.filter(p => p.price > 500));
+console.log('Find Laptop:', productManager.find(p => p.name === "Laptop"));
+
+console.log('\n=== Order Operations ===');
+console.log('All orders:', orderManager.getAll());
+console.log('Orders by John Doe:', orderManager.filter(o => o.customerName === "John Doe"));
+
+// Calculate total value of all orders
+const totalOrderValue = orderManager.getAll().reduce((total, order) => {
+    return total + order.items.reduce((orderTotal, item) => orderTotal + item.price, 0);
+}, 0);
+console.log('Total value of all orders: $' + totalOrderValue);
+
+// Advanced Generic Examples
+console.log('\n=== Advanced Generic Examples ===');
+
+// Generic interface with type parameter
+interface Pair<T, U> {
+    first: T;
+    second: U;
+}
+
+// Generic constraints using extends
+interface Identifiable {
+    id: number;
+}
+
+class AdvancedDataManager<T extends Identifiable> {
+    private data: T[] = [];
+
+    add(item: T): void {
+        this.data.push(item);
+    }
+
+    getById(id: number): T | undefined {
+        return this.data.find(item => item.id === id);
+    }
+
+    // Generic method within generic class
+    transform<U>(transformer: (item: T) => U): U[] {
+        return this.data.map(transformer);
+    }
+}
+
+// Generic utility functions
+function swap<T>(pair: Pair<T, T>): Pair<T, T> {
+    return { first: pair.second, second: pair.first };
+}
+
+function createPair<T, U>(first: T, second: U): Pair<T, U> {
+    return { first, second };
+}
+
+// Using the advanced generic implementations
+const advancedProductManager = new AdvancedDataManager<Product>();
+products.forEach(product => advancedProductManager.add(product));
+
+// Example of generic method usage
+const productNames = advancedProductManager.transform(product => product.name);
+console.log('Product names:', productNames);
+
+// Example of generic utility function usage
+const numberPair = createPair(1, "one");
+console.log('Number-String pair:', numberPair);
+
+const swappedProducts = swap({ first: products[0], second: products[1] });
+console.log('Swapped products:', swappedProducts);
+
+// Generic constraints example
+function printOrderDetail<T extends Order>(order: T): void {
+    console.log(`Order #${order.id} by ${order.customerName}`);
+    console.log('Items:', order.items.map(item => item.name).join(', '));
+}
+
+console.log('\n=== Order Details with Generic Constraint ===');
+orders.forEach(printOrderDetail);
+
+// Generic type with multiple bounds
+interface Priced {
+    price: number;
+}
+
+interface Named {
+    name: string;
+}
+
+function getPricedItemName<T extends Priced & Named>(item: T): string {
+    return `${item.name} ($${item.price})`;
+}
+
+console.log('\n=== Products with Price and Name ===');
+products.forEach(product => {
+    console.log(getPricedItemName(product));
+});

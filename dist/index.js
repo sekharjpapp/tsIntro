@@ -37,3 +37,64 @@ console.log('Fruits with more than 5 characters:', longFruits);
 // reduce: accumulate values
 const totalLength = fruits.reduce((acc, fruit) => acc + fruit.length, 0);
 console.log('Total length of all fruit names:', totalLength);
+// Generic DataManager class to handle both Products and Orders
+class DataManager {
+    constructor() {
+        this.items = [];
+    }
+    // Add an item
+    add(item) {
+        this.items.push(item);
+    }
+    // Get all items
+    getAll() {
+        return this.items;
+    }
+    // Find item by custom predicate
+    find(predicate) {
+        return this.items.find(predicate);
+    }
+    // Filter items by custom predicate
+    filter(predicate) {
+        return this.items.filter(predicate);
+    }
+}
+// Create sample data
+const products = [
+    { id: 1, name: "Laptop", price: 999 },
+    { id: 2, name: "Smartphone", price: 699 },
+    { id: 3, name: "Headphones", price: 199 }
+];
+const orders = [
+    {
+        id: 1,
+        customerName: "John Doe",
+        items: [products[0], products[2]]
+    },
+    {
+        id: 2,
+        customerName: "Jane Smith",
+        items: [products[1]]
+    }
+];
+// Demonstrate generic class usage
+console.log('\n=== Generic Class Examples ===');
+// Product manager
+const productManager = new DataManager();
+products.forEach(product => productManager.add(product));
+// Order manager
+const orderManager = new DataManager();
+orders.forEach(order => orderManager.add(order));
+// Example operations
+console.log('\n=== Product Operations ===');
+console.log('All products:', productManager.getAll());
+console.log('Products over $500:', productManager.filter(p => p.price > 500));
+console.log('Find Laptop:', productManager.find(p => p.name === "Laptop"));
+console.log('\n=== Order Operations ===');
+console.log('All orders:', orderManager.getAll());
+console.log('Orders by John Doe:', orderManager.filter(o => o.customerName === "John Doe"));
+// Calculate total value of all orders
+const totalOrderValue = orderManager.getAll().reduce((total, order) => {
+    return total + order.items.reduce((orderTotal, item) => orderTotal + item.price, 0);
+}, 0);
+console.log('Total value of all orders: $' + totalOrderValue);
