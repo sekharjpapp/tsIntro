@@ -211,3 +211,24 @@ console.log('\n=== Products with Price and Name ===');
 products.forEach(product => {
     console.log(getPricedItemName(product));
 });
+
+// Import and use calculator functions
+import { add, addArray, Calculator } from './calculator';
+
+console.log('\n=== Calculator Generic Functions ===');
+// Using the simple add function
+const sum = add(10, 20);
+console.log('Simple addition:', sum);
+
+// Using the array addition
+const numbers: number[] = [1, 2, 3, 4, 5];
+const arraySum = addArray(numbers);
+console.log('Array sum:', arraySum);
+
+// Using the Calculator class
+const calculator = new Calculator(100);
+const result = calculator
+    .add(50)
+    .subtract(25)
+    .getValue();
+console.log('Calculator chain result:', result);

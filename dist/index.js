@@ -98,3 +98,52 @@ const totalOrderValue = orderManager.getAll().reduce((total, order) => {
     return total + order.items.reduce((orderTotal, item) => orderTotal + item.price, 0);
 }, 0);
 console.log('Total value of all orders: $' + totalOrderValue);
+// Advanced Generic Examples
+console.log('\n=== Advanced Generic Examples ===');
+class AdvancedDataManager {
+    constructor() {
+        this.data = [];
+    }
+    add(item) {
+        this.data.push(item);
+    }
+    getById(id) {
+        return this.data.find(item => item.id === id);
+    }
+    // Generic method within generic class
+    transform(transformer) {
+        return this.data.map(transformer);
+    }
+}
+// Generic utility functions
+function swap(pair) {
+    return { first: pair.second, second: pair.first };
+}
+function createPair(first, second) {
+    return { first, second };
+}
+// Using the advanced generic implementations
+const advancedProductManager = new AdvancedDataManager();
+products.forEach(product => advancedProductManager.add(product));
+// Example of generic method usage
+const productNames = advancedProductManager.transform(product => product.name);
+console.log('Product names:', productNames);
+// Example of generic utility function usage
+const numberPair = createPair(1, "one");
+console.log('Number-String pair:', numberPair);
+const swappedProducts = swap({ first: products[0], second: products[1] });
+console.log('Swapped products:', swappedProducts);
+// Generic constraints example
+function printOrderDetail(order) {
+    console.log(`Order #${order.id} by ${order.customerName}`);
+    console.log('Items:', order.items.map(item => item.name).join(', '));
+}
+console.log('\n=== Order Details with Generic Constraint ===');
+orders.forEach(printOrderDetail);
+function getPricedItemName(item) {
+    return `${item.name} ($${item.price})`;
+}
+console.log('\n=== Products with Price and Name ===');
+products.forEach(product => {
+    console.log(getPricedItemName(product));
+});
